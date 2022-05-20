@@ -158,7 +158,7 @@ class TributeRange {
                 }
                 this.pasteHtml(text, info.mentionPosition, endPos)
             }
-            
+
             context.element.dispatchEvent(new CustomEvent('input', { bubbles: true }))
             context.element.dispatchEvent(replaceEvent)
         }
@@ -192,8 +192,8 @@ class TributeRange {
     }
 
     getWindowSelection() {
-        if (this.tribute.collection.iframe) {
-            return this.tribute.collection.iframe.contentWindow.getSelection()
+        if (this.tribute.collection[0].iframe) {
+            return this.tribute.collection[0].iframe.contentWindow.getSelection()
         }
 
         return window.getSelection()
