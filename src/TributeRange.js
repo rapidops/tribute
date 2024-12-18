@@ -9,8 +9,8 @@ class TributeRange {
 
     getDocument() {
         let iframe
-        if (this.tribute.current.collection) {
-            iframe = this.tribute.current.collection.iframe
+        if (this.tribute.current.collection[0]) {
+            iframe = this.tribute.current.collection[0].iframe
         }
 
         if (!iframe) {
@@ -179,8 +179,8 @@ class TributeRange {
     }
 
     getWindowSelection() {
-        if (this.tribute.collection.iframe) {
-            return this.tribute.collection.iframe.contentWindow.getSelection()
+        if (this.tribute.collection[0].iframe) {
+            return this.tribute.collection[0].iframe.contentWindow.getSelection()
         }
 
         return window.getSelection()
@@ -517,10 +517,26 @@ class TributeRange {
         range.setStart(sel.anchorNode, selectedNodePosition)
         range.setEnd(sel.anchorNode, selectedNodePosition)
 
-        range.collapse(false)
-
-        let rect = range.getBoundingClientRect()
-
+        range.collapse(false);
+       
+        const internalRect = range.getBoundingClientRect();
+        const rect = {
+            bottom: internalRect.bottom,
+            top: internalRect.top,
+            left: internalRect.left,
+            right: internalRect.right,
+            height: internalRect.height,
+            width: internalRect.width,
+            x: internalRect.x,
+            y: internalRect.y
+        };
+        if (this.tribute.collection[0] && this.tribute.collection[0].iframe && this.tribute.collection[0].iframe.getBoundingClientRect ) {
+            const iframeReact = this.tribute.collection[0].iframe.getBoundingClientRect ? this.tribute.collection[0].iframe.getBoundingClientRect() : {};
+            rect.bottom += iframeReact.bottom;
+            rect.top += iframeReact.top;
+            rect.left += iframeReact.left;
+            rect.right += iframeReact.right;
+        }
         return this.getFixedCoordinatesRelativeToRect(rect);
     }
 
